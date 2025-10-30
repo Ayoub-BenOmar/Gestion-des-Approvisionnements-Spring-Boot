@@ -2,6 +2,8 @@ package com.tricol.CommandeFournisseur.controller;
 
 import com.tricol.CommandeFournisseur.entities.Fournisseur;
 import com.tricol.CommandeFournisseur.service.FournisseurService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -21,7 +23,8 @@ public class FournisseurController {
     }
 
     @PostMapping
-    public Fournisseur create(@RequestBody Fournisseur fournisseur) {
-        return service.save(fournisseur);
+    public ResponseEntity<Fournisseur> create(@RequestBody Fournisseur fournisseur) {
+        Fournisseur saved = service.save(fournisseur);
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
 }
