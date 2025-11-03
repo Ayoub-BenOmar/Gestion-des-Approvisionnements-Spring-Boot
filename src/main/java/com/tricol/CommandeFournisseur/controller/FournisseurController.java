@@ -19,8 +19,8 @@ public class FournisseurController {
 
     @GetMapping
     public ResponseEntity<List<FournisseurDto>> getAll() {
-        List<FournisseurDto> fournisseurs = service.getAll();
-        return ResponseEntity.ok(fournisseurs);
+        List<FournisseurDto> fournisseurDtos = service.getAll();
+        return ResponseEntity.ok(fournisseurDtos);
     }
 
     @PostMapping

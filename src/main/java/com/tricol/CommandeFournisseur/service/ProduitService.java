@@ -23,7 +23,7 @@ public class ProduitService {
         return produitMapper.toDto(produit);
     }
 
-    public List<ProduitDto> getAll(ProduitDto dto){
+    public List<ProduitDto> getAll(){
         return repository.findAll().stream().map(produitMapper::toDto).toList();
     }
 
