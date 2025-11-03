@@ -18,7 +18,7 @@ public class FournisseurService {
     private final FournisseurMapper fournisseurMapper;
 
     public List<FournisseurDto> getAll() {
-        return repository.findAll().stream().map(fournisseurMapper::toDto).collect(Collectors.toList());
+        return repository.findAll().stream().map(fournisseurMapper::toDto).toList();
     }
 
     public FournisseurDto save(FournisseurDto dto) {
