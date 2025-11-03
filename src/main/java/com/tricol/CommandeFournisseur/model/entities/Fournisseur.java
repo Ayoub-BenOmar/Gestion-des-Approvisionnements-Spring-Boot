@@ -1,4 +1,4 @@
-package com.tricol.CommandeFournisseur.entities;
+package com.tricol.CommandeFournisseur.model.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

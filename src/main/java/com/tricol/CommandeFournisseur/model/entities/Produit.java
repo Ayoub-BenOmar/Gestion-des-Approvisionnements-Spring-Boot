@@ -1,4 +1,4 @@
-package com.tricol.CommandeFournisseur.entities;
+package com.tricol.CommandeFournisseur.model.entities;
 
 import jakarta.persistence.*;
 
@@ -9,10 +9,16 @@ public class Produit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(nullable = false)
     private String nom;
     private String description;
+
+    @Column(nullable = false)
     private double prixUnitaire;
     private String categorie;
+
+    @Column(nullable = false)
+    private double stock = 0.0;
 
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
@@ -24,4 +30,6 @@ public class Produit {
     public void setPrixUnitaire(double prixUnitaire) { this.prixUnitaire = prixUnitaire; }
     public String getCategorie() { return categorie; }
     public void setCategorie(String categorie) { this.categorie = categorie; }
+    public double getStock() {return stock;}
+    public void setStock(double stock) {this.stock = stock;}
 }

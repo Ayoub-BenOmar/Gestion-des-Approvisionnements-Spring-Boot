@@ -1,40 +1,43 @@
 package com.tricol.CommandeFournisseur.service;
 
-import com.tricol.CommandeFournisseur.entities.Fournisseur;
+import com.tricol.CommandeFournisseur.model.dto.FournisseurDto;
+import com.tricol.CommandeFournisseur.model.entities.Fournisseur;
+import com.tricol.CommandeFournisseur.model.mapper.FournisseurMapper;
 import com.tricol.CommandeFournisseur.repository.FournisseurRepository;
-import jakarta.websocket.server.PathParam;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class FournisseurService {
     private final FournisseurRepository repository;
+    private final FournisseurMapper fournisseurMapper;
 
-    public FournisseurService(FournisseurRepository repository) {
-        this.repository = repository;
+    public List<FournisseurDto> getAll() {
+        return repository.findAll().stream().map(fournisseurMapper::toDto).collect(Collectors.toList());
     }
 
-    public List<Fournisseur> getAll() {
-        return repository.findAll();
+    public FournisseurDto save(FournisseurDto dto) {
+        Fournisseur fournisseur = fournisseurMapper.toEntity(dto);
+        fournisseur = repository.save(fournisseur);
+        return fournisseurMapper.toDto(fournisseur);
     }
 
-    public Fournisseur save(Fournisseur fournisseur) {
-        return repository.save(fournisseur);
+    public Optional<FournisseurDto> findById(Integer id){
+        return repository.findById(id).map(fournisseurMapper::toDto);
     }
 
-    public Optional<Fournisseur> findById(Integer id){
-        if (id != null){
-            return repository.findById(id);
-        }else {
-            return Optional.empty();
-        }
+    public FournisseurDto update(FournisseurDto dto){
+        Fournisseur fournisseur = fournisseurMapper.toEntity(dto);
+        fournisseur = repository.save(fournisseur);
+        return fournisseurMapper.toDto(fournisseur);
     }
 
-    public void update(Fournisseur fournisseur){
-        repository.save(fournisseur);
+    public void delete(Integer id){
+        repository.findById(id).ifPresent(repository::delete);
     }
 }
