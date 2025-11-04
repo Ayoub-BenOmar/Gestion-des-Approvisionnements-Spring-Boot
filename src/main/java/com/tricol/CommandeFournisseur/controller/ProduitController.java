@@ -43,11 +43,11 @@ public class ProduitController {
         Optional<ProduitDto> found = service.getById(id);
         if (found.isPresent()){
             ProduitDto exist = found.get();
-            exist.setNom(exist.getNom());
-            exist.setCategorie(exist.getCategorie());
-            exist.setDescription(exist.getDescription());
-            exist.setPrixUnitaire(exist.getPrixUnitaire());
-            exist.setStock(exist.getStock());
+            exist.setNom(dto.getNom());
+            exist.setCategorie(dto.getCategorie());
+            exist.setDescription(dto.getDescription());
+            exist.setPrixUnitaire(dto.getPrixUnitaire());
+            exist.setStock(dto.getStock());
 
             ProduitDto updated = service.update(exist);
             return ResponseEntity.ok(updated);
