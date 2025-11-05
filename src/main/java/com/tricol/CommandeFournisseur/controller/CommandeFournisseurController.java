@@ -36,8 +36,13 @@ public class CommandeFournisseurController {
 
     @PostMapping
     public ResponseEntity<CommandeFournisseurDto> save(@RequestBody CommandeFournisseurDto dto) {
-        CommandeFournisseurDto commande = service.save(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(commande);
+        try {
+            CommandeFournisseurDto commande = service.save(dto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(commande);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
     }
 
     @PutMapping("/{id}/status")

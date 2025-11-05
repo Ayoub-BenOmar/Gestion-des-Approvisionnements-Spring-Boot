@@ -26,10 +26,8 @@ public class CommandeFournisseurService {
     private final CommandeFournisseurMapper mapper;
 
     public List<CommandeFournisseurDto> getAll() {
-        return commandeRepository.findAll()
-                .stream()
-                .map(mapper::toDto)
-                .toList();
+        List<CommandeFournisseur> commandes = commandeRepository.findAll();
+        return mapper.toDtoList(commandes);
     }
 
     public Optional<CommandeFournisseurDto> findById(Integer id) {
@@ -54,7 +52,16 @@ public class CommandeFournisseurService {
         commande.setMontantTotal(total);
 
         CommandeFournisseur saved = commandeRepository.save(commande);
-        return mapper.toDto(saved);
+
+        CommandeFournisseurDto responseDto = new CommandeFournisseurDto();
+        responseDto.setId(saved.getId());
+        responseDto.setDateCommande(saved.getDateCommande());
+        responseDto.setStatut(saved.getStatut());
+        responseDto.setMontantTotal(saved.getMontantTotal());
+        responseDto.setFournisseurId(saved.getFournisseur().getId());
+        responseDto.setProduitIds(saved.getProduits().stream().map(Produit::getId).toList());
+
+        return responseDto;
     }
 
     public String updateStatus(Integer id, StatutCommande statut) {

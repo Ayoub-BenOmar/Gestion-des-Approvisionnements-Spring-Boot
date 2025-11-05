@@ -4,8 +4,7 @@ import com.tricol.CommandeFournisseur.model.dto.CommandeFournisseurDto;
 import com.tricol.CommandeFournisseur.model.entities.CommandeFournisseur;
 import com.tricol.CommandeFournisseur.model.entities.Fournisseur;
 import com.tricol.CommandeFournisseur.model.entities.Produit;
-import org.mapstruct.Mapper;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,25 +12,20 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface CommandeFournisseurMapper {
 
-    CommandeFournisseurDto toDto(CommandeFournisseur commande);
+    @Mapping(target = "fournisseurId", source = "fournisseur.id")
+    @Mapping(target = "produitIds", expression = "java(mapProduitsToIds(commandeFournisseur.getProduits()))")
+    CommandeFournisseurDto toDto(CommandeFournisseur commandeFournisseur);
+
+    @Mapping(target = "fournisseur", ignore = true)
+    @Mapping(target = "produits", ignore = true)
     CommandeFournisseur toEntity(CommandeFournisseurDto dto);
 
-    @Named("fournisseurToId")
-    default Integer fournisseurToId(Fournisseur fournisseur) {
-        return fournisseur != null ? fournisseur.getId() : null;
-    }
-    @Named("produitsToIds")
-    default List<Integer> produitsToIds(List<Produit> produits) {
-        return produits.stream().map(Produit::getId).collect(Collectors.toList());
-    }
+    List<CommandeFournisseurDto> toDtoList(List<CommandeFournisseur> commandes);
 
-    @Named("idToFournisseur")
-    default Fournisseur idToFournisseur(Integer id) {
-        return null;
+    default List<Integer> mapProduitsToIds(List<Produit> produits) {
+        if (produits == null) return null;
+        return produits.stream()
+                .map(Produit::getId)
+                .collect(Collectors.toList());
     }
-    @Named("idsToProduits")
-    default List<Produit> idsToProduits(List<Integer> ids) {
-        return null;
-    }
-
 }

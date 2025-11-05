@@ -23,7 +23,7 @@ public class CommandeFournisseur {
     private LocalDate dateCommande;
 
     @Enumerated(EnumType.STRING)
-    private StatutCommande statut;
+    private StatutCommande statut = StatutCommande.EN_ATTENTE;
 
     private Double montantTotal;
 
