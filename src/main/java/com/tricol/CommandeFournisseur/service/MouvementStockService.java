@@ -41,7 +41,11 @@ public class MouvementStockService {
                     .quantite(cp.getQuantite())
                     .build();
 
+            Produit produit = cp.getProduit();
+            produit.setStock(produit.getStock() - cp.getQuantite());
+
             stockRepository.save(mouvement);
+            produitRepository.save(produit);
         }
     }
 

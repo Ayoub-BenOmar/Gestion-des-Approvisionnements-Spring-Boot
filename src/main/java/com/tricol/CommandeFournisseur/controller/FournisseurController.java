@@ -3,6 +3,7 @@ package com.tricol.CommandeFournisseur.controller;
 import com.tricol.CommandeFournisseur.model.dto.FournisseurDto;
 import com.tricol.CommandeFournisseur.model.entities.Fournisseur;
 import com.tricol.CommandeFournisseur.service.FournisseurService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class FournisseurController {
     }
 
     @PostMapping
-    public ResponseEntity<FournisseurDto> create(@RequestBody FournisseurDto dto) {
+    public ResponseEntity<FournisseurDto> create(@Valid @RequestBody FournisseurDto dto) {
         FournisseurDto saved = service.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }

@@ -2,6 +2,9 @@ package com.tricol.CommandeFournisseur.model.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Fournisseur {
@@ -10,16 +13,27 @@ public class Fournisseur {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank(message = "Societe is required")
     private String societe;
+
+    @NotBlank(message = "Adresse is required")
     private String adresse;
+
+    @NotBlank(message = "Contact is required")
     private String contact;
 
-    @Email
+    @Email(message = "Email must be valid")
     private String email;
+
+    @Pattern(regexp = "\\d{10}", message = "Telephone must be 10 digits")
     private String telephone;
+
     private String ville;
+
+    @Size(min = 15, max = 15, message = "ICE must be 15 characters")
     private String ICE;
 
+    // Getters and Setters
     public Integer getId() { return id; }
     public void setId(Integer id) { this.id = id; }
     public String getSociete() { return societe; }
