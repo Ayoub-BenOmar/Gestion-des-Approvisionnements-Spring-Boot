@@ -26,6 +26,7 @@ public class CommandeFournisseurService {
     private final FournisseurRepository fournisseurRepository;
     private final ProduitRepository produitRepository;
     private final CommandeFournisseurMapper mapper;
+    private final MouvementStockService mouvementStockService;
 
     public List<CommandeFournisseurDto> getAll() {
         List<CommandeFournisseur> commandes = commandeRepository.findAll();
@@ -64,6 +65,7 @@ public class CommandeFournisseurService {
         commande.setCommandeProduits(commandeProduits);
 
         CommandeFournisseur saved = commandeRepository.save(commande);
+        mouvementStockService.createMouvementSortie(saved);
 
         return CommandeFournisseurDto.builder()
                 .id(saved.getId())

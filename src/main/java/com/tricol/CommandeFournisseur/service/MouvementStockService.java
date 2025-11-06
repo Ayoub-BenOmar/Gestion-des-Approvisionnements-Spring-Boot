@@ -1,6 +1,7 @@
 package com.tricol.CommandeFournisseur.service;
 
 import com.tricol.CommandeFournisseur.model.entities.CommandeFournisseur;
+import com.tricol.CommandeFournisseur.model.entities.CommandeFournisseurProduit;
 import com.tricol.CommandeFournisseur.model.entities.MouvementStock;
 import com.tricol.CommandeFournisseur.model.entities.Produit;
 import com.tricol.CommandeFournisseur.model.enums.TypeMouvement;
@@ -29,9 +30,19 @@ public class MouvementStockService {
         produitRepository.save(produit);
     }
 
-//    public void createMouvementSortie(CommandeFournisseur commandeFournisseur){
-//        MouvementStock mouvement = MouvementStock.builder()
-//                .dateMouvement(LocalDate.now())
-//                .
-//    }
+    public void createMouvementSortie(CommandeFournisseur commandeFournisseur) {
+        for (CommandeFournisseurProduit cp : commandeFournisseur.getCommandeProduits()) {
+            MouvementStock mouvement = MouvementStock.builder()
+                    .dateMouvement(LocalDate.now())
+                    .typeMouvement(TypeMouvement.SORTIE)
+                    .fournisseur(commandeFournisseur.getFournisseur())
+                    .commande(commandeFournisseur)
+                    .produit(cp.getProduit())
+                    .quantite(cp.getQuantite())
+                    .build();
+
+            stockRepository.save(mouvement);
+        }
+    }
+
 }
