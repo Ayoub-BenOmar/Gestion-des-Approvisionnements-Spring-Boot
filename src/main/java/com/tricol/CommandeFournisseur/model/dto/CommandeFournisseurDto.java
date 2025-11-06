@@ -16,5 +16,5 @@ public class CommandeFournisseurDto {
     private StatutCommande statut;
     private Double montantTotal;
     private Integer fournisseurId;
-    private List<Integer> produitIds;
+    private List<ProduitCommandeDto> produits;
 }

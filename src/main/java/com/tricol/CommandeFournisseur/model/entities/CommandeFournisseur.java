@@ -9,8 +9,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "commande_fournisseur")
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -31,11 +29,54 @@ public class CommandeFournisseur {
     @JoinColumn(name = "fournisseur_id", nullable = false)
     private Fournisseur fournisseur;
 
-    @ManyToMany
-    @JoinTable(
-            name = "commande_produit",
-            joinColumns = @JoinColumn(name = "commande_id"),
-            inverseJoinColumns = @JoinColumn(name = "produit_id")
-    )
-    private List<Produit> produits;
+    @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CommandeFournisseurProduit> commandeProduits;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public LocalDate getDateCommande() {
+        return dateCommande;
+    }
+
+    public void setDateCommande(LocalDate dateCommande) {
+        this.dateCommande = dateCommande;
+    }
+
+    public StatutCommande getStatut() {
+        return statut;
+    }
+
+    public void setStatut(StatutCommande statut) {
+        this.statut = statut;
+    }
+
+    public Double getMontantTotal() {
+        return montantTotal;
+    }
+
+    public void setMontantTotal(Double montantTotal) {
+        this.montantTotal = montantTotal;
+    }
+
+    public Fournisseur getFournisseur() {
+        return fournisseur;
+    }
+
+    public void setFournisseur(Fournisseur fournisseur) {
+        this.fournisseur = fournisseur;
+    }
+
+    public List<CommandeFournisseurProduit> getCommandeProduits() {
+        return commandeProduits;
+    }
+
+    public void setCommandeProduits(List<CommandeFournisseurProduit> commandeProduits) {
+        this.commandeProduits = commandeProduits;
+    }
 }

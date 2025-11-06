@@ -2,6 +2,7 @@ package com.tricol.CommandeFournisseur.service;
 
 import com.tricol.CommandeFournisseur.model.dto.CommandeFournisseurDto;
 import com.tricol.CommandeFournisseur.model.entities.CommandeFournisseur;
+import com.tricol.CommandeFournisseur.model.entities.CommandeFournisseurProduit;
 import com.tricol.CommandeFournisseur.model.entities.Fournisseur;
 import com.tricol.CommandeFournisseur.model.entities.Produit;
 import com.tricol.CommandeFournisseur.model.enums.StatutCommande;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,31 +40,41 @@ public class CommandeFournisseurService {
         Fournisseur fournisseur = fournisseurRepository.findById(dto.getFournisseurId())
                 .orElseThrow(() -> new RuntimeException("Fournisseur not found"));
 
-        List<Produit> produits = produitRepository.findAllById(dto.getProduitIds());
-
-        double total = produits.stream()
-                .mapToDouble(Produit::getPrixUnitaire)
-                .sum();
-
         CommandeFournisseur commande = new CommandeFournisseur();
         commande.setDateCommande(LocalDate.now());
         commande.setStatut(StatutCommande.EN_ATTENTE);
         commande.setFournisseur(fournisseur);
-        commande.setProduits(produits);
+
+        double total = 0.0;
+        List<CommandeFournisseurProduit> commandeProduits = new ArrayList<>();
+
+        for (var pDto : dto.getProduits()) {
+            Produit produit = produitRepository.findById(pDto.getProduitId())
+                    .orElseThrow(() -> new RuntimeException("Produit not found"));
+            total += produit.getPrixUnitaire() * pDto.getQuantite();
+
+            commandeProduits.add(CommandeFournisseurProduit.builder()
+                    .commande(commande)
+                    .produit(produit)
+                    .quantite(pDto.getQuantite())
+                    .build());
+        }
+
         commande.setMontantTotal(total);
+        commande.setCommandeProduits(commandeProduits);
 
         CommandeFournisseur saved = commandeRepository.save(commande);
 
-        CommandeFournisseurDto responseDto = new CommandeFournisseurDto();
-        responseDto.setId(saved.getId());
-        responseDto.setDateCommande(saved.getDateCommande());
-        responseDto.setStatut(saved.getStatut());
-        responseDto.setMontantTotal(saved.getMontantTotal());
-        responseDto.setFournisseurId(saved.getFournisseur().getId());
-        responseDto.setProduitIds(saved.getProduits().stream().map(Produit::getId).toList());
-
-        return responseDto;
+        return CommandeFournisseurDto.builder()
+                .id(saved.getId())
+                .dateCommande(saved.getDateCommande())
+                .statut(saved.getStatut())
+                .montantTotal(saved.getMontantTotal())
+                .fournisseurId(saved.getFournisseur().getId())
+                .produits(dto.getProduits())
+                .build();
     }
+
 
     public String updateStatus(Integer id, StatutCommande statut) {
         Optional<CommandeFournisseur> opt = commandeRepository.findById(id);

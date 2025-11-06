@@ -36,7 +36,7 @@ public class Produit {
     @Column(nullable = false)
     private double stock = 0.0;
 
-    @ManyToMany(mappedBy = "produits")
-    private List<CommandeFournisseur> commandes;
+    @OneToMany(mappedBy = "produit")
+    private List<CommandeFournisseurProduit> commandesProduits;
 
 }

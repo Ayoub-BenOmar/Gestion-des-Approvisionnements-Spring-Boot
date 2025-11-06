@@ -1,9 +1,9 @@
 package com.tricol.CommandeFournisseur.model.mapper;
 
 import com.tricol.CommandeFournisseur.model.dto.CommandeFournisseurDto;
+import com.tricol.CommandeFournisseur.model.dto.ProduitCommandeDto;
 import com.tricol.CommandeFournisseur.model.entities.CommandeFournisseur;
-import com.tricol.CommandeFournisseur.model.entities.Fournisseur;
-import com.tricol.CommandeFournisseur.model.entities.Produit;
+import com.tricol.CommandeFournisseur.model.entities.CommandeFournisseurProduit;
 import org.mapstruct.*;
 
 import java.util.List;
@@ -13,19 +13,24 @@ import java.util.stream.Collectors;
 public interface CommandeFournisseurMapper {
 
     @Mapping(target = "fournisseurId", source = "fournisseur.id")
-    @Mapping(target = "produitIds", expression = "java(mapProduitsToIds(commandeFournisseur.getProduits()))")
+    @Mapping(target = "produits", expression = "java(mapCommandeProduitsToProduitDtos(commandeFournisseur.getCommandeProduits()))")
     CommandeFournisseurDto toDto(CommandeFournisseur commandeFournisseur);
 
     @Mapping(target = "fournisseur", ignore = true)
-    @Mapping(target = "produits", ignore = true)
+    @Mapping(target = "commandeProduits", ignore = true)
     CommandeFournisseur toEntity(CommandeFournisseurDto dto);
 
     List<CommandeFournisseurDto> toDtoList(List<CommandeFournisseur> commandes);
 
-    default List<Integer> mapProduitsToIds(List<Produit> produits) {
-        if (produits == null) return null;
-        return produits.stream()
-                .map(Produit::getId)
+    default List<ProduitCommandeDto> mapCommandeProduitsToProduitDtos(List<CommandeFournisseurProduit> commandeProduits) {
+        if (commandeProduits == null) return null;
+
+        return commandeProduits.stream()
+                .map(cp -> ProduitCommandeDto.builder()
+                        .produitId(cp.getProduit().getId())
+                        .quantite(cp.getQuantite())
+                        .build())
                 .collect(Collectors.toList());
     }
 }
+

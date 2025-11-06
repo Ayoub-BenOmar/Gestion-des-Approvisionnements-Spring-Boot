@@ -18,6 +18,8 @@ public class MouvementStock {
 
     private LocalDate dateMouvement;
     private double quantite;
+
+    @Enumerated(EnumType.STRING)
     private TypeMouvement typeMouvement;
 
     @ManyToOne

@@ -16,10 +16,13 @@ import java.util.Optional;
 public class ProduitService {
     private final ProduitRepository repository;
     private final ProduitMapper produitMapper;
+    private final MouvementStockService mouvementStockService;
 
     public ProduitDto save(ProduitDto dto){
         Produit produit = produitMapper.toEntity(dto);
-        produit = repository.save(produit);
+        Produit saved = repository.save(produit);
+
+        mouvementStockService.createMouvementEntree(saved);
         return produitMapper.toDto(produit);
     }
 

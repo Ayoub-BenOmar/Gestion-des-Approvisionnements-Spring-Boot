@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class MouvementStockDto {
     private Integer id;
-
     private LocalDate dateMouvement;
     private Integer quantite;
     private TypeMouvement typeMouvement;
