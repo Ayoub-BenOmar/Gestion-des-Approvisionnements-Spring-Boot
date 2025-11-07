@@ -1,17 +1,13 @@
 package com.tricol.CommandeFournisseur.controller;
 
 import com.tricol.CommandeFournisseur.model.dto.FournisseurDto;
-import com.tricol.CommandeFournisseur.model.dto.PagedResponse;
-import com.tricol.CommandeFournisseur.model.dto.ProduitDto;
 import com.tricol.CommandeFournisseur.service.FournisseurService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 import java.util.Optional;
 
 @RestController

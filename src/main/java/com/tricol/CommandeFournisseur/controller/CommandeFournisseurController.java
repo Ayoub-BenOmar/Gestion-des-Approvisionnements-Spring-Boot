@@ -1,13 +1,10 @@
 package com.tricol.CommandeFournisseur.controller;
 
 import com.tricol.CommandeFournisseur.model.dto.CommandeFournisseurDto;
-import com.tricol.CommandeFournisseur.model.dto.FournisseurDto;
-import com.tricol.CommandeFournisseur.model.dto.PagedResponse;
 import com.tricol.CommandeFournisseur.model.enums.StatutCommande;
 import com.tricol.CommandeFournisseur.service.CommandeFournisseurService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
