@@ -9,8 +9,10 @@ import com.tricol.CommandeFournisseur.repository.MouvementStockRepository;
 import com.tricol.CommandeFournisseur.repository.ProduitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -46,6 +48,27 @@ public class MouvementStockService {
 
             stockRepository.save(mouvement);
             produitRepository.save(produit);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<MouvementStock> findMouvements(Integer produitId, TypeMouvement type, Integer commandeId) {
+        if (produitId != null && type != null && commandeId != null) {
+            return stockRepository.findByProduitIdAndTypeMouvementAndCommandeId(produitId, type, commandeId);
+        } else if (produitId != null && type != null) {
+            return stockRepository.findByProduitIdAndTypeMouvement(produitId, type);
+        } else if (produitId != null && commandeId != null) {
+            return stockRepository.findByProduitIdAndCommandeId(produitId, commandeId);
+        } else if (type != null && commandeId != null) {
+            return stockRepository.findByTypeMouvementAndCommandeId(type, commandeId);
+        } else if (produitId != null) {
+            return stockRepository.findByProduitId(produitId);
+        } else if (type != null) {
+            return stockRepository.findByTypeMouvement(type);
+        } else if (commandeId != null) {
+            return stockRepository.findByCommandeId(commandeId);
+        } else {
+            return stockRepository.findAll();
         }
     }
 

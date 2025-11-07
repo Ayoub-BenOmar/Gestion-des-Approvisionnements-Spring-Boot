@@ -22,7 +22,7 @@ public class CommandeFournisseurProduit {
     @JoinColumn(name = "produit_id")
     private Produit produit;
 
-    private Double quantite;
+    private Integer quantite;
 
     public Integer getId() {
         return id;
@@ -48,11 +48,11 @@ public class CommandeFournisseurProduit {
         this.produit = produit;
     }
 
-    public Double getQuantite() {
+    public Integer getQuantite() {
         return quantite;
     }
 
-    public void setQuantite(Double quantite) {
+    public void setQuantite(Integer quantite) {
         this.quantite = quantite;
     }
 }

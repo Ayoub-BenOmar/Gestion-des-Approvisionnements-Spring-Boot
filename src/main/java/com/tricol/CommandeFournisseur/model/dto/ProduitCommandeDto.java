@@ -8,5 +8,5 @@ import lombok.*;
 @Builder
 public class ProduitCommandeDto {
     private Integer produitId;
-    private Double quantite;
+    private Integer quantite;
 }
