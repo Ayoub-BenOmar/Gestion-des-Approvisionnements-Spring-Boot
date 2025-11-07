@@ -5,6 +5,7 @@ import com.tricol.CommandeFournisseur.model.entities.Produit;
 import com.tricol.CommandeFournisseur.model.mapper.ProduitMapper;
 import com.tricol.CommandeFournisseur.repository.ProduitRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -20,10 +21,11 @@ public class ProduitService {
 
     public ProduitDto save(ProduitDto dto){
         Produit produit = produitMapper.toEntity(dto);
+        produit = updateCump(produit);
         Produit saved = repository.save(produit);
 
         mouvementStockService.createMouvementEntree(saved);
-        return produitMapper.toDto(produit);
+        return produitMapper.toDto(saved);
     }
 
     public List<ProduitDto> getAll(){
@@ -42,5 +44,34 @@ public class ProduitService {
 
     public void delete(Integer id){
         repository.findById(id).ifPresent(repository::delete);
+    }
+
+    public Page<Produit> getProduitsPaged(int page, int size, String sortBy, String sortDir) {
+        Sort sort = sortDir.equalsIgnoreCase("asc") ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return repository.findAll(pageable);
+    }
+
+    public Produit updateCump(Produit produit){
+        Optional<Produit> existing = repository.findByNom(produit.getNom());
+        if (existing.isPresent()){
+            Produit existingP = existing.get();
+            double stock = existingP.getStock();
+            double cump = existingP.getCump();
+
+            double quantiteAjoutee = produit.getStock();
+            double prix = produit.getPrixUnitaire();
+
+            double nouveauCump = ((stock * cump) + (quantiteAjoutee * prix)) / (stock + quantiteAjoutee);
+
+            existingP.setCump(nouveauCump);
+            existingP.setStock(stock + quantiteAjoutee);
+            existingP.setPrixUnitaire(prix);
+
+            return existingP;
+        }else{
+            produit.setCump(produit.getPrixUnitaire());
+            return produit;
+        }
     }
 }

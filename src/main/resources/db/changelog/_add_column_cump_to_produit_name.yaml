@@ -1,0 +1,23 @@
+# _add_column_cump_to_table_produit.yaml
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: ayoub
+      changes:
+        - addColumn:
+            tableName: produit
+            columns:
+              - column:
+                  name: cump
+                  type: double
+                  defaultValueNumeric: 0.00
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 2
+      author: ayoub
+      changes:
+        - sql:
+            sql: "UPDATE produit SET cump = prix_unitaire"
+

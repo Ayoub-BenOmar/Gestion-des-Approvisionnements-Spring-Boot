@@ -12,4 +12,5 @@ public class ProduitDto {
     private double prixUnitaire;
     private String categorie;
     private double stock = 0.0;
+    private double cump = 0.0;
 }

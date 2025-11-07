@@ -1,0 +1,4 @@
+# changelog-master.yaml
+databaseChangeLog:
+  - include:
+      file: db/changelog/_add_column_cump_to_produit_name.yaml

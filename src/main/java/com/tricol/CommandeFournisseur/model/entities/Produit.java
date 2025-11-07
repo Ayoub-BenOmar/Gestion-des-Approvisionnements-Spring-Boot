@@ -36,6 +36,13 @@ public class Produit {
     @Column(nullable = false)
     private double stock = 0.0;
 
+    @Setter
+    @Getter
+    @Column(nullable = false)
+    private Double cump = 0.0;
+
+    @Setter
+    @Getter
     @OneToMany(mappedBy = "produit")
     private List<CommandeFournisseurProduit> commandesProduits;
 

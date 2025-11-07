@@ -52,7 +52,7 @@ public class CommandeFournisseurService {
         for (var pDto : dto.getProduits()) {
             Produit produit = produitRepository.findById(pDto.getProduitId())
                     .orElseThrow(() -> new RuntimeException("Produit not found"));
-            total += produit.getPrixUnitaire() * pDto.getQuantite();
+            total += produit.getCump() * pDto.getQuantite();
 
             commandeProduits.add(CommandeFournisseurProduit.builder()
                     .commande(commande)
