@@ -5,6 +5,9 @@ import com.tricol.CommandeFournisseur.model.entities.Fournisseur;
 import com.tricol.CommandeFournisseur.model.mapper.FournisseurMapper;
 import com.tricol.CommandeFournisseur.repository.FournisseurRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +21,12 @@ public class FournisseurService {
 
     public List<FournisseurDto> getAll() {
         return repository.findAll().stream().map(fournisseurMapper::toDto).toList();
+    }
+
+    public Page<FournisseurDto> getAll(Pageable pageable) {
+        var page = repository.findAll(pageable);
+        List<FournisseurDto> dtos = page.getContent().stream().map(fournisseurMapper::toDto).toList();
+        return new PageImpl<>(dtos, pageable, page.getTotalElements());
     }
 
     public FournisseurDto save(FournisseurDto dto) {

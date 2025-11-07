@@ -1,10 +1,11 @@
 package com.tricol.CommandeFournisseur.controller;
 
 import com.tricol.CommandeFournisseur.model.dto.FournisseurDto;
-import com.tricol.CommandeFournisseur.model.entities.Fournisseur;
+import com.tricol.CommandeFournisseur.model.dto.PagedResponse;
 import com.tricol.CommandeFournisseur.service.FournisseurService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +20,10 @@ public class FournisseurController {
     private final FournisseurService service;
 
     @GetMapping
-    public ResponseEntity<List<FournisseurDto>> getAll() {
-        List<FournisseurDto> fournisseurDtos = service.getAll();
-        return ResponseEntity.ok(fournisseurDtos);
+    public ResponseEntity<PagedResponse<FournisseurDto>> getAll(Pageable pageable) {
+        var page = service.getAll(pageable);
+        PagedResponse<FournisseurDto> response = new PagedResponse<>(page.getContent(), page.getTotalElements(), page.getTotalPages());
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping

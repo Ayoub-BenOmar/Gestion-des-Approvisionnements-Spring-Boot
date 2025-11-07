@@ -11,6 +11,9 @@ import com.tricol.CommandeFournisseur.repository.CommandeFournisseurRepository;
 import com.tricol.CommandeFournisseur.repository.FournisseurRepository;
 import com.tricol.CommandeFournisseur.repository.ProduitRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -31,6 +34,12 @@ public class CommandeFournisseurService {
     public List<CommandeFournisseurDto> getAll() {
         List<CommandeFournisseur> commandes = commandeRepository.findAll();
         return mapper.toDtoList(commandes);
+    }
+
+    public Page<CommandeFournisseurDto> getAll(Pageable pageable) {
+        var page = commandeRepository.findAll(pageable);
+        List<CommandeFournisseurDto> dtos = page.getContent().stream().map(mapper::toDto).toList();
+        return new PageImpl<>(dtos, pageable, page.getTotalElements());
     }
 
     public Optional<CommandeFournisseurDto> findById(Integer id) {
@@ -100,4 +109,3 @@ public class CommandeFournisseurService {
         }
     }
 }
-

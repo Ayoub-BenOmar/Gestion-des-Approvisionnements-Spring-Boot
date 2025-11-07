@@ -13,6 +13,5 @@ public interface MouvementStockMapper {
     @Mapping(target = "commandeId", expression = "java(mouvementStock.getCommande() != null ? mouvementStock.getCommande().getId() : null)")
     MouvementStockDto toDto(MouvementStock mouvementStock);
 
-    // mapping inverse si besoin
     MouvementStock toEntity(MouvementStockDto dto);
 }

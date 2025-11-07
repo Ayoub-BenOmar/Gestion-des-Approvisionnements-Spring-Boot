@@ -1,8 +1,10 @@
 package com.tricol.CommandeFournisseur.controller;
 
 import com.tricol.CommandeFournisseur.model.dto.ProduitDto;
+import com.tricol.CommandeFournisseur.model.dto.PagedResponse;
 import com.tricol.CommandeFournisseur.service.ProduitService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +19,10 @@ public class ProduitController {
     private final ProduitService service;
 
     @GetMapping
-    public ResponseEntity<List<ProduitDto>> getAll(){
-        List<ProduitDto> produitDtos = service.getAll();
-        return ResponseEntity.ok(produitDtos);
+    public ResponseEntity<PagedResponse<ProduitDto>> getAll(Pageable pageable){
+        var page = service.getAll(pageable);
+        PagedResponse<ProduitDto> response = new PagedResponse<>(page.getContent(), page.getTotalElements(), page.getTotalPages());
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
