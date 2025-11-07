@@ -1,6 +1,7 @@
 package com.tricol.CommandeFournisseur.service;
 
 import com.tricol.CommandeFournisseur.model.dto.CommandeFournisseurDto;
+import com.tricol.CommandeFournisseur.model.dto.ProduitDto;
 import com.tricol.CommandeFournisseur.model.entities.CommandeFournisseur;
 import com.tricol.CommandeFournisseur.model.entities.CommandeFournisseurProduit;
 import com.tricol.CommandeFournisseur.model.entities.Fournisseur;
@@ -11,9 +12,7 @@ import com.tricol.CommandeFournisseur.repository.CommandeFournisseurRepository;
 import com.tricol.CommandeFournisseur.repository.FournisseurRepository;
 import com.tricol.CommandeFournisseur.repository.ProduitRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -36,10 +35,10 @@ public class CommandeFournisseurService {
         return mapper.toDtoList(commandes);
     }
 
-    public Page<CommandeFournisseurDto> getAll(Pageable pageable) {
-        var page = commandeRepository.findAll(pageable);
-        List<CommandeFournisseurDto> dtos = page.getContent().stream().map(mapper::toDto).toList();
-        return new PageImpl<>(dtos, pageable, page.getTotalElements());
+    public Page<CommandeFournisseurDto> getAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+        Page<CommandeFournisseur> commandeFournisseurs = commandeRepository.findAll(pageable);
+        return commandeFournisseurs.map(mapper::toDto);
     }
 
     public Optional<CommandeFournisseurDto> findById(Integer id) {

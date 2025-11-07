@@ -32,10 +32,10 @@ public class ProduitService {
         return repository.findAll().stream().map(produitMapper::toDto).toList();
     }
 
-    public Page<ProduitDto> getAll(Pageable pageable) {
-        var page = repository.findAll(pageable);
-        List<ProduitDto> dtos = page.getContent().stream().map(produitMapper::toDto).toList();
-        return new PageImpl<>(dtos, pageable, page.getTotalElements());
+    public Page<ProduitDto> getAll(int page,int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+        Page<Produit> produits = repository.findAll(pageable);
+        return produits.map(produitMapper::toDto);
     }
 
     public Optional<ProduitDto> getById(Integer id){

@@ -1,13 +1,13 @@
 package com.tricol.CommandeFournisseur.service;
 
 import com.tricol.CommandeFournisseur.model.dto.FournisseurDto;
+import com.tricol.CommandeFournisseur.model.dto.ProduitDto;
 import com.tricol.CommandeFournisseur.model.entities.Fournisseur;
+import com.tricol.CommandeFournisseur.model.entities.Produit;
 import com.tricol.CommandeFournisseur.model.mapper.FournisseurMapper;
 import com.tricol.CommandeFournisseur.repository.FournisseurRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,10 +23,10 @@ public class FournisseurService {
         return repository.findAll().stream().map(fournisseurMapper::toDto).toList();
     }
 
-    public Page<FournisseurDto> getAll(Pageable pageable) {
-        var page = repository.findAll(pageable);
-        List<FournisseurDto> dtos = page.getContent().stream().map(fournisseurMapper::toDto).toList();
-        return new PageImpl<>(dtos, pageable, page.getTotalElements());
+    public Page<FournisseurDto> getAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+        Page<Fournisseur> fournisseurs = repository.findAll(pageable);
+        return fournisseurs.map(fournisseurMapper::toDto);
     }
 
     public FournisseurDto save(FournisseurDto dto) {
