@@ -10,14 +10,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class FournisseurTest {
+public class FournisseurServiceTest {
 
     @Mock
     private FournisseurRepository fournisseurRepository;
@@ -95,5 +96,37 @@ public class FournisseurTest {
         verify(fournisseurMapper, times(1)).toDto(fournisseur);
     }
 
+    @Test
+    public void testDeleteFournisseur() {
+        Fournisseur fournisseur = new Fournisseur();
+        fournisseur.setId(1);
+
+        when(fournisseurRepository.findById(1)).thenReturn(Optional.of(fournisseur));
+
+        fournisseurService.delete(1);
+
+        verify(fournisseurRepository, times(1)).findById(1);
+        verify(fournisseurRepository, times(1)).delete(fournisseur);
+    }
+
+    @Test
+    public void testFindById() {
+        Fournisseur fournisseur = new Fournisseur();
+        fournisseur.setId(1);
+
+        FournisseurDto dto = new FournisseurDto();
+        dto.setId(1);
+
+        when(fournisseurRepository.findById(1)).thenReturn(Optional.of(fournisseur));
+        when(fournisseurMapper.toDto(fournisseur)).thenReturn(dto);
+
+        Optional<FournisseurDto> result = fournisseurService.findById(1);
+
+        assertTrue(result.isPresent());
+        assertEquals(1, result.get().getId());
+
+        verify(fournisseurRepository, times(1)).findById(1);
+        verify(fournisseurMapper, times(1)).toDto(fournisseur);
+    }
 
 }
