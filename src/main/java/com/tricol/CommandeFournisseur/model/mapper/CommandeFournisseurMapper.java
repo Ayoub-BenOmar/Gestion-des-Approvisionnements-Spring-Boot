@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public interface CommandeFournisseurMapper {
 
     @Mapping(target = "fournisseurId", source = "fournisseur.id")
-    @Mapping(target = "produits", expression = "java(mapCommandeProduitsToProduitDtos(commandeFournisseur.getCommandeProduits()))")
+    @Mapping(target = "produits", source = "commandeProduits")
     CommandeFournisseurDto toDto(CommandeFournisseur commandeFournisseur);
 
     @Mapping(target = "fournisseur", ignore = true)
@@ -33,4 +33,3 @@ public interface CommandeFournisseurMapper {
                 .collect(Collectors.toList());
     }
 }
-

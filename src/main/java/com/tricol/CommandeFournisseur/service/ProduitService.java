@@ -38,6 +38,11 @@ public class ProduitService {
         return produits.map(produitMapper::toDto);
     }
 
+    public Long getAllProduits(int page, int size){
+        Page<ProduitDto> pr = repository.findAll(PageRequest.of(page, size)).map(produitMapper::toDto);
+        return pr.getTotalElements();
+    }
+
     public Optional<ProduitDto> getById(Integer id){
         return repository.findById(id).map(produitMapper::toDto);
     }
@@ -79,5 +84,12 @@ public class ProduitService {
             produit.setCump(produit.getPrixUnitaire());
             return produit;
         }
+    }
+
+    public double getProduitStockByPage(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Produit> produits = repository.findAll(pageable);
+        double pageStock = produits.getContent().stream().mapToDouble(Produit::getStock).sum();
+        return pageStock;
     }
 }
