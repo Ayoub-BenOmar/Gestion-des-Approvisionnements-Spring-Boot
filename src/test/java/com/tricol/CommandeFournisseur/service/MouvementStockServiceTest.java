@@ -73,6 +73,6 @@ public class MouvementStockServiceTest {
         assertEquals(produit, mouvement.getProduit());
         assertEquals(20, mouvement.getQuantite());
         assertEquals(TypeMouvement.SORTIE, mouvement.getTypeMouvement());
-        assertEquals(80, produit.getStock()); // stock updated
+        assertEquals(80, produit.getStock());
     }
 }
