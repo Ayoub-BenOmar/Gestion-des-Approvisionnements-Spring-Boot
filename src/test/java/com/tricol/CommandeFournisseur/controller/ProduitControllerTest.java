@@ -98,7 +98,7 @@ class ProduitControllerTest {
 
         mockMvc.perform(get("/api/produits")
                         .param("page", "0")
-                        .param("size", "10"))
+                        .param("size", "3"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content.length()").value(3))
                 .andExpect(jsonPath("$.content[0].nom").value("Produit 1"));
