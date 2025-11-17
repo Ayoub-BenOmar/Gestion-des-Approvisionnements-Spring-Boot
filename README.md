@@ -174,6 +174,38 @@ POST /api/commande
 Réponse : 201 Created + DTO de la commande créée.
 
 ---
+## Tests
+Objectif
+- Assurer la non-régression et la validité des fonctionnalités critiques (création commande → mouvements → valorisation).
+
+Commandes principales (Windows cmd)
+- Lancer tous les tests :
+
+```cmd
+mvn clean test
+```
+
+- Lancer une classe de test :
+
+```cmd
+mvn -Dtest=NomDeLaClasseTest test
+```
+
+- Construire sans tests :
+
+```cmd
+mvn -DskipTests package
+```
+
+Interprétation rapide des résultats
+- BUILD SUCCESS : tous les tests sont passés.
+- BUILD FAILURE : un ou plusieurs tests ont échoué ou il y a une erreur de compilation. Consulter `target/surefire-reports/` pour les détails.
+- Couverture (JaCoCo) : fichier `target/site/jacoco/index.html` pour le rapport HTML.
+
+Notes utiles
+- Erreurs fréquentes : stubs Mockito inutilisés (supprimer ou rendre lenient) ; problèmes MapStruct/Lombok → vérifier les mappings et l'annotation processing.
+
+---
 
 ## Conclusion
 En résumé, ce module fournit une base technique et fonctionnelle solide pour gérer les commandes fournisseurs et le suivi des approvisionnements chez Tricol. Il permet de :
@@ -183,23 +215,9 @@ En résumé, ce module fournit une base technique et fonctionnelle solide pour g
 - Valoriser le stock (implémentation CUMP, extensible à FIFO) afin de refléter fidèlement le coût d'approvisionnement.
 - Consommer des bonnes pratiques techniques (architecture en couches, DTOs, mappers, migrations, validation).
 
+Tests : des tests unitaires et d'intégration sont fournis (voir section Tests).
+
 État actuel
 - Fonctionnalités cœur implémentées : gestion des fournisseurs, produits, commandes et mouvements de stock.
 - API REST paginée et triable disponible pour les principales ressources.
 - Mécanique de création automatique des mouvements de stock lors des opérations pertinentes.
-
-Priorités recommandées (court terme)
-1. Couvrir par des tests d'intégration critiques (création de commande → création mouvements → calculs CUMP/FIFO).
-2. Ajouter des filtres avancés et la pagination pour les mouvements (date, fournisseur, plage, tri). 
-3. Mettre en place un contrat API formalisé (Swagger/OpenAPI) et l'export Postman pour faciliter les tests.
-
-Évolutions stratégiques (moyen terme)
-- Implémenter FIFO (si requis par la comptabilité) et vérifier la non‑régression des calculs de coût.
-- Ajouter un système de lots/numéros de réception pour faciliter le FIFO et la traçabilité.
-- Prévoir verrouillage/gestion de concurrence sur le stock (optimistic locking / @Version ou verrous BD) pour éviter anomalies en production.
-
-Contribution & contact
-- Pour contribuer : ouvrir une branche `feature/*`, ajouter tests, et soumettre une merge request avec description claire.
-- Pour priorisation fonctionnelle ou questions métier : contacter le product owner (email à renseigner) ou l'équipe technique.
-
-Merci — ce module est prêt à être intégré et étendu selon les besoins métier ; je peux prioriser et implémenter les points listés dès que vous le souhaitez.
